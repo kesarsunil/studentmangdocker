@@ -30,6 +30,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Normalize incoming paths so routes match whether called with /api/ or without
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && req.url !== '/' && req.url !== '/favicon.ico') {
+    req.url = '/api' + req.url;
+  }
+  next();
+});
+
 let isMongoConnected = false;
 let mongoDb = null;
 
@@ -801,6 +809,14 @@ app.get('/api/health', (req, res) => {
     hasMongoUri: Boolean(process.env.MONGODB_URI),
     databaseName: isMongoConnected ? (mongoDb?.databaseName || process.env.DB_NAME || 'myDatabase') : null,
     time: new Date(),
+  });
+});
+
+// JSON 404 fallback for any unhandled routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `API route not found: ${req.method} ${req.originalUrl || req.url}`,
   });
 });
 
