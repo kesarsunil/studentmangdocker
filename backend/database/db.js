@@ -44,10 +44,12 @@ if (!process.env.MONGODB_URI) {
 }
 
 // Fix for Windows DNS resolving MongoDB SRV records (ECONNREFUSED querySrv)
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch {
-  // Use system default if custom DNS assignment fails
+if (process.platform === 'win32') {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch {
+    // Use system default if custom DNS assignment fails
+  }
 }
 
 const uri = process.env.MONGODB_URI;

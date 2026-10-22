@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 
 let isMongoConnected = false;
 let mongoDb = null;
+let lastMongoError = null;
 
 // Connect to MongoDB Atlas through the dedicated database module
 async function tryMongoConnect() {
@@ -47,20 +48,31 @@ async function tryMongoConnect() {
     if (!process.env.MONGODB_URI) {
       console.warn('⚠️  MONGODB_URI is not set. Please configure MONGODB_URI in Vercel Project Settings -> Environment Variables.');
       isMongoConnected = false;
+      lastMongoError = 'MONGODB_URI is not set in environment variables';
       return;
     }
     await connectToMongoDB();
     mongoDb = getDB();
     isMongoConnected = true;
+    lastMongoError = null;
     console.log('✅ Connected to MongoDB Atlas via ./database module!');
 
     await initCollections();
     console.log('📁 Dedicated MongoDB Collections ready: "faculty", "students", "attendance", "users".');
   } catch (err) {
     isMongoConnected = false;
+    lastMongoError = err.message;
     console.warn('⚠️  MongoDB Atlas connection error:', err.message);
   }
 }
+
+// Ensure MongoDB connection is established before processing any request (essential for Vercel Serverless)
+app.use(async (req, res, next) => {
+  if (!isMongoConnected && process.env.MONGODB_URI) {
+    await tryMongoConnect();
+  }
+  next();
+});
 
 // Auto-reconnect interval if connection drops (local/docker runtime)
 if (!process.env.VERCEL) {
@@ -110,7 +122,7 @@ app.post('/api/auth/login', async (req, res) => {
     if (!isMongoConnected || !mongoDb) {
       const msg = !process.env.MONGODB_URI
         ? 'MongoDB Atlas is not configured. Please set the MONGODB_URI environment variable in your Vercel Project Settings.'
-        : 'MongoDB database is connecting. Please wait a moment and try again.';
+        : `Database connection error: ${lastMongoError || 'Unable to connect to MongoDB Atlas. Ensure 0.0.0.0/0 is added in Atlas Network Access.'}`;
       return res.status(503).json({
         success: false,
         message: msg,
@@ -797,6 +809,7 @@ app.get('/', (req, res) => {
     isMongoConnected,
     database: isMongoConnected ? (mongoDb?.databaseName || process.env.DB_NAME || 'myDatabase') : 'disconnected',
     hasMongoUri: Boolean(process.env.MONGODB_URI),
+    lastMongoError: isMongoConnected ? null : lastMongoError,
     time: new Date(),
   });
 });
@@ -808,6 +821,7 @@ app.get('/api/health', (req, res) => {
     isMongoConnected,
     hasMongoUri: Boolean(process.env.MONGODB_URI),
     databaseName: isMongoConnected ? (mongoDb?.databaseName || process.env.DB_NAME || 'myDatabase') : null,
+    lastMongoError: isMongoConnected ? null : lastMongoError,
     time: new Date(),
   });
 });
