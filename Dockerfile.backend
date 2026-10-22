@@ -10,8 +10,7 @@ COPY backend/package*.json ./backend/
 # Install backend dependencies
 RUN cd backend && npm install --production
 
-# Copy database module and backend source code
-COPY database/ ./database/
+# Copy backend source code (including backend/database)
 COPY backend/ ./backend/
 
 # Set working directory to backend

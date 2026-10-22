@@ -27,9 +27,20 @@ try {
 export { MongoClient, ServerApiVersion, ObjectId };
 
 // Load .env from backend folder or root
-dotenv.config({ path: path.resolve(__dirname, '../backend/.env') });
 if (!process.env.MONGODB_URI) {
   dotenv.config({ path: path.resolve(__dirname, '../.env') });
+}
+if (!process.env.MONGODB_URI) {
+  dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+}
+if (!process.env.MONGODB_URI) {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+}
+if (!process.env.MONGODB_URI) {
+  dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
+}
+if (!process.env.MONGODB_URI) {
+  dotenv.config();
 }
 
 // Fix for Windows DNS resolving MongoDB SRV records (ECONNREFUSED querySrv)
@@ -42,23 +53,42 @@ try {
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
-  console.error('❌ Error: MONGODB_URI is not defined in backend/.env');
+  console.warn('⚠️  Warning: MONGODB_URI is not defined in environment variables. Please configure MONGODB_URI in Vercel Project Settings.');
 }
 
-// Create a MongoClient instance configured for MongoDB Atlas Stable API
-export const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+// Safely create MongoClient instance only if URI exists at module load time
+export let client = uri
+  ? new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    })
+  : null;
 
 let dbInstance = null;
 
 export async function connectToMongoDB() {
   if (dbInstance) {
     return client;
+  }
+
+  const currentUri = process.env.MONGODB_URI;
+  if (!currentUri) {
+    const errorMsg = 'MONGODB_URI is not defined. Please configure MONGODB_URI in Vercel Project Settings -> Environment Variables.';
+    console.error('❌ Error:', errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  if (!client) {
+    client = new MongoClient(currentUri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    });
   }
 
   try {
@@ -88,7 +118,9 @@ export function getDB() {
 
 export async function disconnectFromMongoDB() {
   try {
-    await client.close();
+    if (client) {
+      await client.close();
+    }
     dbInstance = null;
     console.log('🔌 Disconnected from MongoDB Atlas.');
   } catch (err) {

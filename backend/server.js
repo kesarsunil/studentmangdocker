@@ -36,6 +36,11 @@ let mongoDb = null;
 // Connect to MongoDB Atlas through the dedicated database module
 async function tryMongoConnect() {
   try {
+    if (!process.env.MONGODB_URI) {
+      console.warn('⚠️  MONGODB_URI is not set. Please configure MONGODB_URI in Vercel Project Settings -> Environment Variables.');
+      isMongoConnected = false;
+      return;
+    }
     await connectToMongoDB();
     mongoDb = getDB();
     isMongoConnected = true;
@@ -49,20 +54,23 @@ async function tryMongoConnect() {
   }
 }
 
-// Auto-reconnect interval if connection drops
-setInterval(async () => {
-  if (!isMongoConnected) {
-    try {
-      await connectToMongoDB();
-      mongoDb = getDB();
-      isMongoConnected = true;
-      console.log('🎉 MongoDB Atlas connection re-established!');
-      await initCollections();
-    } catch {
-      // Retry silently
+// Auto-reconnect interval if connection drops (local/docker runtime)
+if (!process.env.VERCEL) {
+  const reconnectTimer = setInterval(async () => {
+    if (!isMongoConnected && process.env.MONGODB_URI) {
+      try {
+        await connectToMongoDB();
+        mongoDb = getDB();
+        isMongoConnected = true;
+        console.log('🎉 MongoDB Atlas connection re-established!');
+        await initCollections();
+      } catch {
+        // Retry silently
+      }
     }
-  }
-}, 15000);
+  }, 15000);
+  if (reconnectTimer.unref) reconnectTimer.unref();
+}
 
 // Middleware to ensure DB connection before processing requests (critical for serverless / cold starts)
 app.use(async (req, res, next) => {
@@ -92,9 +100,12 @@ app.post('/api/auth/login', async (req, res) => {
     const cleanPassword = password.trim();
 
     if (!isMongoConnected || !mongoDb) {
+      const msg = !process.env.MONGODB_URI
+        ? 'MongoDB Atlas is not configured. Please set the MONGODB_URI environment variable in your Vercel Project Settings.'
+        : 'MongoDB database is connecting. Please wait a moment and try again.';
       return res.status(503).json({
         success: false,
-        message: 'MongoDB database is connecting. Please wait a moment and try again.',
+        message: msg,
       });
     }
 
@@ -769,9 +780,28 @@ app.get('/api/debug/overview', async (req, res) => {
   }
 });
 
+// Root status check
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'attendance-backend',
+    message: 'AttendSphere Backend API is running.',
+    isMongoConnected,
+    database: isMongoConnected ? (mongoDb?.databaseName || process.env.DB_NAME || 'myDatabase') : 'disconnected',
+    hasMongoUri: Boolean(process.env.MONGODB_URI),
+    time: new Date(),
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', isMongoConnected, time: new Date() });
+  res.json({
+    status: 'ok',
+    isMongoConnected,
+    hasMongoUri: Boolean(process.env.MONGODB_URI),
+    databaseName: isMongoConnected ? (mongoDb?.databaseName || process.env.DB_NAME || 'myDatabase') : null,
+    time: new Date(),
+  });
 });
 
 // Start Express Server locally or in Docker; export app for Vercel Serverless

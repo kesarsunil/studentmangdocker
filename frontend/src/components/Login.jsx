@@ -68,15 +68,27 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
         }),
       });
 
-      const data = await response.json();
+      let data = null;
+      const text = await response.text();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        if (response.status === 500) {
+          throw new Error('Backend server error (500). Please ensure MONGODB_URI is set in Vercel Project Settings.');
+        } else if (response.status === 502 || response.status === 503 || response.status === 504) {
+          throw new Error(`Server temporarily unavailable (${response.status}). Please check database connection.`);
+        } else {
+          throw new Error(`Server returned unexpected response (${response.status}).`);
+        }
+      }
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Login failed. Please verify credentials.');
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || 'Login failed. Please verify credentials.');
       }
 
       onLoginSuccess(data.user);
     } catch (err) {
-      setErrorMessage(err.message);
+      setErrorMessage(err.message || 'Unable to connect to server.');
     } finally {
       setIsLoading(false);
     }
