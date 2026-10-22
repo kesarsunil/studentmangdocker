@@ -105,6 +105,8 @@ export async function connectToMongoDB() {
     return client;
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
+    client = null;
+    dbInstance = null;
     throw err;
   }
 }
