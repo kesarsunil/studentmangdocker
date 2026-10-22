@@ -1,0 +1,28 @@
+# Use official Node.js runtime as parent image
+FROM node:20-alpine
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy package files for dependency caching
+COPY backend/package*.json ./backend/
+
+# Install backend dependencies
+RUN cd backend && npm install --production
+
+# Copy database module and backend source code
+COPY database/ ./database/
+COPY backend/ ./backend/
+
+# Set working directory to backend
+WORKDIR /app/backend
+
+# Expose backend port
+EXPOSE 5000
+
+# Set environment variables
+ENV PORT=5000
+ENV NODE_ENV=production
+
+# Start backend server
+CMD ["npm", "start"]

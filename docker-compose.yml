@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: stud-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - DB_NAME=myDatabase
+      - MONGODB_URI=mongodb+srv://kesharsunil1_db_user:kesarsuneel@cluster0.pnkegbi.mongodb.net/?retryWrites=true&w=majority
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: stud-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://backend:5000
+    depends_on:
+      - backend
+    restart: unless-stopped
