@@ -73,7 +73,9 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
       try {
         data = JSON.parse(text);
       } catch {
-        if (response.status === 500) {
+        if (response.status === 404) {
+          throw new Error('Backend route not found (404). Frontend cannot reach the backend API. Please configure VITE_API_URL or vercel.json.');
+        } else if (response.status === 500) {
           throw new Error('Backend server error (500). Please ensure MONGODB_URI is set in Vercel Project Settings.');
         } else if (response.status === 502 || response.status === 503 || response.status === 504) {
           throw new Error(`Server temporarily unavailable (${response.status}). Please check database connection.`);
