@@ -13,7 +13,7 @@ import {
   getAttendanceCollection,
   getUsersCollection,
   initCollections,
-} from '../database/index.js';
+} from './database/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,6 +64,18 @@ setInterval(async () => {
   }
 }, 15000);
 
+// Middleware to ensure DB connection before processing requests (critical for serverless / cold starts)
+app.use(async (req, res, next) => {
+  if (!isMongoConnected) {
+    try {
+      await tryMongoConnect();
+    } catch {
+      // Failures logged in tryMongoConnect
+    }
+  }
+  next();
+});
+
 // ==========================================
 // AUTHENTICATION API
 // ==========================================
@@ -88,13 +100,29 @@ app.post('/api/auth/login', async (req, res) => {
 
     let matchedUser = null;
 
-    // Check role-specific collection first
-    if (cleanRole === 'faculty') {
+    // Maintainer default credentials check
+    if (cleanRole === 'maintainer') {
+      if (
+        (cleanEmail === 'maintainer@college.edu' || cleanEmail === 'admin@college.edu') &&
+        (cleanPassword === 'admin123' || cleanPassword === 'adminpassword')
+      ) {
+        matchedUser = {
+          _id: 'maintainer_admin',
+          name: 'System Maintainer',
+          email: cleanEmail,
+          role: 'maintainer',
+          department: 'Administration',
+        };
+      }
+    }
+
+    // Check role-specific collection
+    if (!matchedUser && cleanRole === 'faculty') {
       matchedUser = await getFacultyCollection().findOne({
         email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') },
         password: cleanPassword,
       });
-    } else if (cleanRole === 'student') {
+    } else if (!matchedUser && cleanRole === 'student') {
       matchedUser = await getStudentsCollection().findOne({
         email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') },
         password: cleanPassword,
@@ -108,22 +136,6 @@ app.post('/api/auth/login', async (req, res) => {
         password: cleanPassword,
         role: cleanRole,
       });
-    }
-
-    // Maintainer default credentials fallback
-    if (!matchedUser && cleanRole === 'maintainer') {
-      if (
-        (cleanEmail === 'maintainer@college.edu' || cleanEmail === 'admin@college.edu') &&
-        cleanPassword === 'admin123'
-      ) {
-        matchedUser = {
-          _id: 'maintainer_admin',
-          name: 'System Maintainer',
-          email: cleanEmail,
-          role: 'maintainer',
-          department: 'Administration',
-        };
-      }
     }
 
     if (!matchedUser) {
@@ -762,11 +774,20 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', isMongoConnected, time: new Date() });
 });
 
-// Start Express Server
-app.listen(PORT, async () => {
-  console.log(`\n======================================================`);
-  console.log(`🚀 Attendance Backend Server live at: http://localhost:${PORT}`);
-  console.log(`======================================================`);
+// Start Express Server locally or in Docker; export app for Vercel Serverless
+if (!process.env.VERCEL) {
+  app.listen(PORT, async () => {
+    console.log(`\n======================================================`);
+    console.log(`🚀 Attendance Backend Server live at: http://localhost:${PORT}`);
+    console.log(`======================================================`);
 
-  await tryMongoConnect();
-});
+    await tryMongoConnect();
+  });
+} else {
+  // In Vercel serverless environment, initiate connection on startup
+  tryMongoConnect().catch((err) => {
+    console.warn('⚠️  Vercel initial MongoDB connection attempt:', err.message);
+  });
+}
+
+export default app;

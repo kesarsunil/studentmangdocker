@@ -1,5 +1,5 @@
 // MongoDB Atlas Connection
-export {
+import {
   client,
   connectToMongoDB,
   connectDB,
@@ -9,7 +9,7 @@ export {
 } from './db.js';
 
 // Dedicated Collection Handlers
-export {
+import {
   getFacultyCollection,
   getAllFaculty,
   getFacultyById,
@@ -18,7 +18,7 @@ export {
   deleteFaculty,
 } from './faculty.js';
 
-export {
+import {
   getStudentsCollection,
   getAllStudents,
   getStudentById,
@@ -27,7 +27,7 @@ export {
   deleteStudent,
 } from './students.js';
 
-export {
+import {
   getAttendanceCollection,
   markAttendance,
   getAttendanceHistory,
@@ -35,11 +35,75 @@ export {
   deleteAttendanceSession,
 } from './attendance.js';
 
-export {
+import {
   getUsersCollection,
   authenticateUser,
   syncUserWithUsersCollection,
   deleteUserByEmail,
 } from './users.js';
 
-export { initCollections } from './collections.js';
+import { initCollections } from './collections.js';
+
+// Named exports
+export {
+  client,
+  connectToMongoDB,
+  connectDB,
+  getDB,
+  disconnectFromMongoDB,
+  ObjectId,
+  getFacultyCollection,
+  getAllFaculty,
+  getFacultyById,
+  getFacultyByEmail,
+  createFaculty,
+  deleteFaculty,
+  getStudentsCollection,
+  getAllStudents,
+  getStudentById,
+  getStudentByEmail,
+  createStudent,
+  deleteStudent,
+  getAttendanceCollection,
+  markAttendance,
+  getAttendanceHistory,
+  getStudentAttendanceSummary,
+  deleteAttendanceSession,
+  getUsersCollection,
+  authenticateUser,
+  syncUserWithUsersCollection,
+  deleteUserByEmail,
+  initCollections,
+};
+
+// Default export for maximum compatibility across bundlers and runtimes
+export default {
+  client,
+  connectToMongoDB,
+  connectDB,
+  getDB,
+  disconnectFromMongoDB,
+  ObjectId,
+  getFacultyCollection,
+  getAllFaculty,
+  getFacultyById,
+  getFacultyByEmail,
+  createFaculty,
+  deleteFaculty,
+  getStudentsCollection,
+  getAllStudents,
+  getStudentById,
+  getStudentByEmail,
+  createStudent,
+  deleteStudent,
+  getAttendanceCollection,
+  markAttendance,
+  getAttendanceHistory,
+  getStudentAttendanceSummary,
+  deleteAttendanceSession,
+  getUsersCollection,
+  authenticateUser,
+  syncUserWithUsersCollection,
+  deleteUserByEmail,
+  initCollections,
+};
