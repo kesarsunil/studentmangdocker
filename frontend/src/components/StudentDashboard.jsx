@@ -257,35 +257,35 @@ export default function StudentDashboard({ currentUser, onNotify }) {
   const percentage = summary?.overallPercentage || 0;
   const isGood = percentage >= 75;
   const isWarning = percentage >= 65 && percentage < 75;
-  const statusColor = isGood ? '#10b981' : isWarning ? '#f59e0b' : '#f43f5e';
+  const statusColor = isGood ? '#90EE90' : isWarning ? '#FFB800' : '#FF3B30';
 
-  // Severity color badge helper
+  // Severity color badge helper with exact palette
   const getSeverityBadge = (severity) => {
     switch (severity) {
       case 'Urgent / Emergency':
-        return { bg: 'rgba(244, 63, 94, 0.2)', border: '#f43f5e', color: '#fb7185' };
+        return { bg: 'rgba(255, 59, 48, 0.15)', border: '#FF3B30', color: '#FF3B30' };
       case 'High':
-        return { bg: 'rgba(249, 115, 22, 0.2)', border: '#f97316', color: '#fdba74' };
+        return { bg: 'rgba(255, 106, 0, 0.15)', border: '#FF6A00', color: '#FF6A00' };
       case 'Medium':
-        return { bg: 'rgba(245, 158, 11, 0.2)', border: '#f59e0b', color: '#fcd34d' };
+        return { bg: 'rgba(255, 184, 0, 0.15)', border: '#FFB800', color: '#FFB800' };
       default:
-        return { bg: 'rgba(16, 185, 129, 0.2)', border: '#10b981', color: '#6ee7b7' };
+        return { bg: 'rgba(144, 238, 144, 0.15)', border: '#90EE90', color: '#90EE90' };
     }
   };
 
-  // Status badge helper
+  // Status badge helper with exact palette
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Resolved':
-        return { bg: 'rgba(16, 185, 129, 0.15)', border: 'rgba(16, 185, 129, 0.4)', color: '#34d399', text: 'Resolved' };
+        return { bg: 'rgba(144, 238, 144, 0.15)', border: 'rgba(144, 238, 144, 0.4)', color: '#90EE90', text: 'Resolved' };
       case 'Action Taken':
-        return { bg: 'rgba(168, 85, 247, 0.15)', border: 'rgba(168, 85, 247, 0.4)', color: '#c084fc', text: 'Action Taken' };
+        return { bg: 'rgba(191, 90, 242, 0.15)', border: 'rgba(191, 90, 242, 0.4)', color: '#BF5AF2', text: 'Action Taken' };
       case 'Under Review':
-        return { bg: 'rgba(6, 182, 212, 0.15)', border: 'rgba(6, 182, 212, 0.4)', color: '#38bdf8', text: 'Under Committee Review' };
+        return { bg: 'rgba(0, 245, 255, 0.15)', border: 'rgba(0, 245, 255, 0.4)', color: '#00F5FF', text: 'Under Committee Review' };
       case 'Dismissed':
-        return { bg: 'rgba(148, 163, 184, 0.15)', border: 'rgba(148, 163, 184, 0.4)', color: '#94a3b8', text: 'Dismissed' };
+        return { bg: 'var(--dust-badge)', border: 'var(--dust-border)', color: 'var(--dust-text)', text: 'Dismissed' };
       default:
-        return { bg: 'rgba(245, 158, 11, 0.15)', border: 'rgba(245, 158, 11, 0.4)', color: '#fbbf24', text: 'Pending Investigation' };
+        return { bg: 'rgba(255, 184, 0, 0.15)', border: 'rgba(255, 184, 0, 0.4)', color: '#FFB800', text: 'Pending Investigation' };
     }
   };
 
@@ -308,12 +308,12 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                 width: 56,
                 height: 56,
                 borderRadius: 'var(--radius-md)',
-                background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+                background: 'linear-gradient(135deg, #00F5FF 0%, #BF5AF2 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#fff',
-                boxShadow: '0 8px 20px rgba(6, 182, 212, 0.3)',
+                boxShadow: '0 8px 24px rgba(0, 245, 255, 0.35)',
               }}
             >
               <GraduationCap size={32} />
@@ -324,21 +324,21 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>
                   {currentUser.name}
                 </h2>
-                <span className="badge" style={{ background: 'rgba(6, 182, 212, 0.15)', color: '#38bdf8', border: '1px solid rgba(6, 182, 212, 0.3)' }}>
+                <span className="badge" style={{ background: 'rgba(0, 245, 255, 0.12)', color: '#00F5FF', border: '1px solid rgba(0, 245, 255, 0.35)' }}>
                   {currentUser.rollNo || 'Student'}
                 </span>
                 <span
                   className="badge"
                   style={{
-                    background: currentUser.section === 'Section B' ? 'rgba(168, 85, 247, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                    color: currentUser.section === 'Section B' ? '#c084fc' : '#38bdf8',
-                    border: `1px solid ${currentUser.section === 'Section B' ? 'rgba(168, 85, 247, 0.3)' : 'rgba(56, 189, 248, 0.3)'}`,
+                    background: currentUser.section === 'Section B' ? 'rgba(191, 90, 242, 0.15)' : 'rgba(0, 245, 255, 0.12)',
+                    color: currentUser.section === 'Section B' ? '#BF5AF2' : '#00F5FF',
+                    border: `1px solid ${currentUser.section === 'Section B' ? 'rgba(191, 90, 242, 0.35)' : 'rgba(0, 245, 255, 0.35)'}`,
                   }}
                 >
                   {currentUser.section || 'Section A'}
                 </span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: 4 }}>
+              <p style={{ color: 'var(--dust-text)', fontSize: '0.875rem', marginTop: 4 }}>
                 {currentUser.department} • {currentUser.semester || 'Semester 4'} • {currentUser.email}
               </p>
             </div>
@@ -349,8 +349,8 @@ export default function StudentDashboard({ currentUser, onNotify }) {
               style={{
                 padding: '8px 16px',
                 borderRadius: 'var(--radius-md)',
-                background: isGood ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-                border: `1px solid ${isGood ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
+                background: isGood ? 'rgba(144, 238, 144, 0.12)' : isWarning ? 'rgba(255, 184, 0, 0.14)' : 'rgba(255, 59, 48, 0.14)',
+                border: `1px solid ${isGood ? 'rgba(144, 238, 144, 0.35)' : isWarning ? 'rgba(255, 184, 0, 0.35)' : 'rgba(255, 59, 48, 0.35)'}`,
                 color: statusColor,
                 fontWeight: 700,
                 fontSize: '0.85rem',
@@ -629,8 +629,9 @@ export default function StudentDashboard({ currentUser, onNotify }) {
               padding: 24,
               marginBottom: 24,
               textAlign: 'left',
-              border: '1px solid rgba(244, 63, 94, 0.4)',
-              background: 'linear-gradient(135deg, rgba(88, 28, 44, 0.45), rgba(18, 24, 38, 0.85))',
+              border: '1px solid rgba(255, 59, 48, 0.35)',
+              background: '#171717',
+              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 59, 48, 0.12)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -640,11 +641,11 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                     width: 48,
                     height: 48,
                     borderRadius: 12,
-                    background: 'rgba(244, 63, 94, 0.25)',
+                    background: 'rgba(255, 59, 48, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#fb7185',
+                    color: '#FF3B30',
                     flexShrink: 0,
                   }}
                 >
@@ -655,14 +656,14 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff' }}>
                       Institutional Anti-Ragging & Safety Cell
                     </h3>
-                    <span className="badge" style={{ background: 'rgba(244, 63, 94, 0.2)', color: '#fb7185', border: '1px solid rgba(244, 63, 94, 0.4)' }}>
+                    <span className="badge" style={{ background: 'rgba(255, 59, 48, 0.15)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.4)' }}>
                       Zero Tolerance Policy
                     </span>
                   </div>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: 6, lineHeight: 1.5, maxWidth: 780 }}>
+                  <p style={{ color: 'var(--dust-text)', fontSize: '0.875rem', marginTop: 6, lineHeight: 1.5, maxWidth: 780 }}>
                     Our institution enforces a strict Zero Tolerance Policy against any form of ragging, physical intimidation, psychological bullying, or verbal harassment. All complaints, including time, location, contact phone, and proof photos, are stored directly in MongoDB Atlas and immediately accessible to the Administration.
                   </p>
-                  <div style={{ display: 'flex', gap: 16, marginTop: 12, flexWrap: 'wrap', fontSize: '0.8rem', color: '#fca5a5' }}>
+                  <div style={{ display: 'flex', gap: 16, marginTop: 12, flexWrap: 'wrap', fontSize: '0.8rem', color: '#ffb3b3' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <PhoneCall size={14} /> National 24x7 Helpline: <strong>1800-180-5522</strong> (Toll Free)
                     </span>
@@ -674,14 +675,13 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                 </div>
               </div>
 
+              {/* Primary Action Button: Neon Orange (#FF6A00) */}
               <button
                 onClick={() => setShowComplaintModal(true)}
-                className="btn btn-danger"
+                className="btn btn-primary"
                 style={{
                   padding: '12px 24px',
                   fontSize: '0.925rem',
-                  fontWeight: 700,
-                  boxShadow: '0 6px 20px rgba(244, 63, 94, 0.4)',
                 }}
               >
                 <Plus size={18} />
@@ -1177,22 +1177,23 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 16,
-                      background: 'rgba(13, 18, 30, 0.8)',
+                      background: '#171717',
                       padding: 12,
                       borderRadius: 'var(--radius-md)',
-                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                      border: '1px solid rgba(0, 245, 255, 0.35)',
+                      boxShadow: '0 0 12px rgba(0, 245, 255, 0.15)',
                     }}
                   >
                     <img
                       src={proofPreview}
                       alt="Proof Preview"
-                      style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--border-color)' }}
+                      style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 6, border: '1px solid rgba(0, 245, 255, 0.3)' }}
                     />
                     <div style={{ flex: 1, textAlign: 'left' }}>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#38bdf8', display: 'block' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#00F5FF', display: 'block' }}>
                         ✓ Proof Photo Ready to Store in MongoDB
                       </span>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--dust-text)' }}>
                         Optimized and prepared for admin review
                       </span>
                     </div>
@@ -1200,7 +1201,7 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                       type="button"
                       onClick={handleRemovePhoto}
                       className="btn btn-secondary btn-sm"
-                      style={{ color: '#fb7185', borderColor: 'rgba(244, 63, 94, 0.3)' }}
+                      style={{ color: '#FF3B30', borderColor: 'rgba(255, 59, 48, 0.4)' }}
                     >
                       <Trash2 size={14} />
                       <span>Remove</span>
@@ -1266,10 +1267,10 @@ export default function StudentDashboard({ currentUser, onNotify }) {
                 <button
                   type="submit"
                   disabled={submittingComplaint}
-                  className="btn btn-danger"
+                  className="btn btn-primary"
                   style={{
-                    background: 'linear-gradient(135deg, #f43f5e, #be123c)',
-                    boxShadow: '0 4px 14px rgba(244, 63, 94, 0.4)',
+                    padding: '11px 24px',
+                    fontSize: '0.925rem',
                   }}
                 >
                   {submittingComplaint ? (

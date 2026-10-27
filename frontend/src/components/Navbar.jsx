@@ -6,13 +6,26 @@ export default function Navbar({ currentUser, onLogout, isMongoConnected }) {
     if (!currentUser) return null;
     switch (currentUser.role) {
       case 'maintainer':
-        return <Shield size={16} className="text-indigo-400" />;
+        return <Shield size={16} style={{ color: '#FF6A00' }} />;
       case 'faculty':
-        return <BookOpen size={16} className="text-emerald-400" />;
+        return <BookOpen size={16} style={{ color: '#BF5AF2' }} />;
       case 'student':
-        return <UserCheck size={16} className="text-cyan-400" />;
+        return <UserCheck size={16} style={{ color: '#00F5FF' }} />;
       default:
         return null;
+    }
+  };
+
+  const getRoleBadgeClass = () => {
+    switch (currentUser?.role) {
+      case 'maintainer':
+        return 'badge badge-orange';
+      case 'faculty':
+        return 'badge badge-purple';
+      case 'student':
+        return 'badge badge-cyan';
+      default:
+        return 'badge badge-dust';
     }
   };
 
@@ -23,29 +36,29 @@ export default function Navbar({ currentUser, onLogout, isMongoConnected }) {
           <GraduationCap size={22} />
         </div>
         <div>
-          <span>AttendSphere</span>
-          <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--text-dim)', fontWeight: 500, letterSpacing: '0.4px' }}>
+          <span className="animated-gradient-text" style={{ fontSize: '1.3rem', fontWeight: 800 }}>AttendSphere</span>
+          <span style={{ fontSize: '0.7rem', display: 'block', color: 'var(--dust-text)', fontWeight: 500, letterSpacing: '0.4px' }}>
             Smart Attendance Management
           </span>
         </div>
       </div>
 
       <div className="nav-actions">
-        {/* MongoDB Connection Status Pill */}
+        {/* MongoDB Connection Status Pill: Light Green (#90EE90) for Live */}
         <div
           className="status-indicator"
           title="Direct connection to MongoDB Atlas"
           style={{
-            background: isMongoConnected ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-            borderColor: isMongoConnected ? 'rgba(16, 185, 129, 0.3)' : 'rgba(245, 158, 11, 0.3)',
-            color: isMongoConnected ? '#34d399' : '#fbbf24',
+            background: isMongoConnected ? 'rgba(144, 238, 144, 0.12)' : 'rgba(255, 184, 0, 0.12)',
+            borderColor: isMongoConnected ? 'rgba(144, 238, 144, 0.35)' : 'rgba(255, 184, 0, 0.35)',
+            color: isMongoConnected ? '#90EE90' : '#FFB800',
           }}
         >
           <div
             className="status-dot animate-pulse-slow"
             style={{
-              background: isMongoConnected ? '#10b981' : '#f59e0b',
-              boxShadow: isMongoConnected ? '0 0 8px #10b981' : '0 0 8px #f59e0b',
+              background: isMongoConnected ? '#90EE90' : '#FFB800',
+              boxShadow: isMongoConnected ? '0 0 10px #90EE90' : '0 0 10px #FFB800',
             }}
           />
           <Database size={13} style={{ marginRight: 2 }} />
@@ -60,11 +73,11 @@ export default function Navbar({ currentUser, onLogout, isMongoConnected }) {
                 <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>
                   {currentUser.name}
                 </span>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--dust-text)' }}>
                   {currentUser.email}
                 </span>
               </div>
-              <span className="badge badge-role" style={{ marginLeft: 6 }}>
+              <span className={getRoleBadgeClass()} style={{ marginLeft: 6, textTransform: 'uppercase', fontSize: '0.7rem' }}>
                 {currentUser.role}
               </span>
             </div>

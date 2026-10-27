@@ -278,33 +278,33 @@ export default function MaintainerDashboard({ currentUser: _currentUser, onNotif
     });
   };
 
-  // Severity color badge helper
+  // Severity color badge helper with exact palette
   const getSeverityBadge = (severity) => {
     switch (severity) {
       case 'Urgent / Emergency':
-        return { bg: 'rgba(244, 63, 94, 0.2)', border: '#f43f5e', color: '#fb7185' };
+        return { bg: 'rgba(255, 59, 48, 0.15)', border: '#FF3B30', color: '#FF3B30' };
       case 'High':
-        return { bg: 'rgba(249, 115, 22, 0.2)', border: '#f97316', color: '#fdba74' };
+        return { bg: 'rgba(255, 106, 0, 0.15)', border: '#FF6A00', color: '#FF6A00' };
       case 'Medium':
-        return { bg: 'rgba(245, 158, 11, 0.2)', border: '#f59e0b', color: '#fcd34d' };
+        return { bg: 'rgba(255, 184, 0, 0.15)', border: '#FFB800', color: '#FFB800' };
       default:
-        return { bg: 'rgba(16, 185, 129, 0.2)', border: '#10b981', color: '#6ee7b7' };
+        return { bg: 'rgba(144, 238, 144, 0.15)', border: '#90EE90', color: '#90EE90' };
     }
   };
 
-  // Status badge helper
+  // Status badge helper with exact palette
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Resolved':
-        return { bg: 'rgba(16, 185, 129, 0.15)', border: 'rgba(16, 185, 129, 0.4)', color: '#34d399', text: 'Resolved' };
+        return { bg: 'rgba(144, 238, 144, 0.15)', border: 'rgba(144, 238, 144, 0.4)', color: '#90EE90', text: 'Resolved' };
       case 'Action Taken':
-        return { bg: 'rgba(168, 85, 247, 0.15)', border: 'rgba(168, 85, 247, 0.4)', color: '#c084fc', text: 'Action Taken' };
+        return { bg: 'rgba(191, 90, 242, 0.15)', border: 'rgba(191, 90, 242, 0.4)', color: '#BF5AF2', text: 'Action Taken' };
       case 'Under Review':
-        return { bg: 'rgba(6, 182, 212, 0.15)', border: 'rgba(6, 182, 212, 0.4)', color: '#38bdf8', text: 'Under Review' };
+        return { bg: 'rgba(0, 245, 255, 0.15)', border: 'rgba(0, 245, 255, 0.4)', color: '#00F5FF', text: 'Under Review' };
       case 'Dismissed':
-        return { bg: 'rgba(148, 163, 184, 0.15)', border: 'rgba(148, 163, 184, 0.4)', color: '#94a3b8', text: 'Dismissed' };
+        return { bg: 'var(--dust-badge)', border: 'var(--dust-border)', color: 'var(--dust-text)', text: 'Dismissed' };
       default:
-        return { bg: 'rgba(245, 158, 11, 0.15)', border: 'rgba(245, 158, 11, 0.4)', color: '#fbbf24', text: 'Pending' };
+        return { bg: 'rgba(255, 184, 0, 0.15)', border: 'rgba(255, 184, 0, 0.4)', color: '#FFB800', text: 'Pending' };
     }
   };
 
@@ -363,23 +363,23 @@ export default function MaintainerDashboard({ currentUser: _currentUser, onNotif
             onClick={() => setActiveTab('complaints')}
             className="btn btn-secondary"
             style={{
-              borderColor: pendingComplaintsCount > 0 ? 'rgba(244, 63, 94, 0.4)' : undefined,
-              color: pendingComplaintsCount > 0 ? '#fb7185' : undefined,
+              borderColor: pendingComplaintsCount > 0 ? '#FF3B30' : undefined,
+              color: pendingComplaintsCount > 0 ? '#FF3B30' : undefined,
             }}
           >
             <ShieldAlert size={16} />
             <span>Anti-Ragging Cell ({complaintList.length})</span>
             {pendingComplaintsCount > 0 && (
-              <span className="badge" style={{ background: '#f43f5e', color: '#fff', fontSize: '0.7rem', padding: '2px 6px' }}>
+              <span className="badge" style={{ background: '#FF3B30', color: '#fff', fontSize: '0.7rem', padding: '2px 6px' }}>
                 {pendingComplaintsCount}
               </span>
             )}
           </button>
 
+          {/* Primary Action Buttons: Neon Orange (#FF6A00) */}
           <button
             onClick={() => setShowAddFacultyModal(true)}
             className="btn btn-primary"
-            style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
           >
             <PlusCircle size={16} />
             <span>Add New Faculty</span>
@@ -388,7 +388,6 @@ export default function MaintainerDashboard({ currentUser: _currentUser, onNotif
           <button
             onClick={() => setShowAddStudentModal(true)}
             className="btn btn-primary"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)' }}
           >
             <PlusCircle size={16} />
             <span>Add New Student</span>
@@ -398,78 +397,81 @@ export default function MaintainerDashboard({ currentUser: _currentUser, onNotif
 
       {/* KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18, marginBottom: 28 }}>
+        {/* Total Faculty: Neon Purple (#BF5AF2) */}
         <div className="glass-panel" style={{ padding: 20, textAlign: 'left' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--dust-text)', textTransform: 'uppercase' }}>
               Total Faculty
             </span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(191, 90, 242, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#BF5AF2' }}>
               <BookOpen size={18} />
             </div>
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff' }}>{stats.totalFaculty}</div>
-          <span style={{ fontSize: '0.75rem', color: '#34d399' }}>Active Instructors</span>
+          <span style={{ fontSize: '0.75rem', color: '#BF5AF2' }}>Active Instructors</span>
         </div>
 
+        {/* Total Students: Neon Cyan (#00F5FF) */}
         <div className="glass-panel" style={{ padding: 20, textAlign: 'left' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--dust-text)', textTransform: 'uppercase' }}>
               Total Students
             </span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(99, 102, 241, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(0, 245, 255, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00F5FF' }}>
               <Users size={18} />
             </div>
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff' }}>{stats.totalStudents}</div>
-          <span style={{ fontSize: '0.75rem', color: '#a5b4fc' }}>Section A, B, C Enrolled</span>
+          <span style={{ fontSize: '0.75rem', color: '#00F5FF' }}>Section A, B, C Enrolled</span>
         </div>
 
-        {/* Anti-Ragging Complaints KPI Card */}
+        {/* Anti-Ragging Complaints KPI Card: Red (#FF3B30) */}
         <div
           className="glass-panel"
           style={{
             padding: 20,
             textAlign: 'left',
             cursor: 'pointer',
-            border: activeTab === 'complaints' ? '1px solid #f43f5e' : undefined,
+            border: activeTab === 'complaints' ? '1px solid #FF3B30' : undefined,
           }}
           onClick={() => setActiveTab('complaints')}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--dust-text)', textTransform: 'uppercase' }}>
               Ragging Reports
             </span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(244, 63, 94, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f43f5e' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255, 59, 48, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF3B30' }}>
               <ShieldAlert size={18} />
             </div>
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: 10 }}>
             <span>{complaintList.length}</span>
             {pendingComplaintsCount > 0 && (
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'rgba(244, 63, 94, 0.25)', color: '#fb7185', padding: '3px 8px', borderRadius: 9999, border: '1px solid rgba(244, 63, 94, 0.5)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'rgba(255, 59, 48, 0.25)', color: '#FF3B30', padding: '3px 8px', borderRadius: 9999, border: '1px solid rgba(255, 59, 48, 0.5)' }}>
                 {pendingComplaintsCount} Pending
               </span>
             )}
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#fb7185' }}>
+          <span style={{ fontSize: '0.75rem', color: pendingComplaintsCount > 0 ? '#FF3B30' : 'var(--dust-text)' }}>
             {pendingComplaintsCount > 0 ? '⚠️ Immediate Action Required' : 'All reports investigated'}
           </span>
         </div>
 
+        {/* MongoDB Live: Light Green (#90EE90) */}
         <div className="glass-panel" style={{ padding: 20, textAlign: 'left' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--dust-text)', textTransform: 'uppercase' }}>
               Database Status
             </span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(144, 238, 144, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#90EE90' }}>
               <Database size={18} />
             </div>
           </div>
           <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', marginTop: 4 }}>
             MongoDB Atlas Live
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#34d399', display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+          <span style={{ fontSize: '0.75rem', color: '#90EE90', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#90EE90', boxShadow: '0 0 8px #90EE90' }} />
             Connected & Syncing
           </span>
         </div>

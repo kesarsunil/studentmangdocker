@@ -8,13 +8,13 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Role info & demo credentials
+  // Role info & demo credentials with exact color palette
   const roleConfig = {
     maintainer: {
       title: 'Maintainer / Admin',
       subtitle: 'Create & manage faculty, students, and system credentials in MongoDB',
       icon: Shield,
-      color: '#6366f1',
+      color: '#FF6A00', // Neon Orange
       demoEmail: 'maintainer@college.edu',
       demoPass: 'adminpassword',
       badge: 'Full Access',
@@ -23,7 +23,7 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
       title: 'Faculty / Instructor',
       subtitle: 'Take student attendance, mark Present/Absent, and track history',
       icon: BookOpen,
-      color: '#10b981',
+      color: '#BF5AF2', // Neon Purple
       demoEmail: 'sarah.faculty@college.edu',
       demoPass: 'faculty123',
       badge: 'Attendance Marking',
@@ -32,7 +32,7 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
       title: 'Student Portal',
       subtitle: 'View attendance percentage, subject logs, and compliance records',
       icon: UserCheck,
-      color: '#06b6d4',
+      color: '#00F5FF', // Neon Cyan
       demoEmail: 'alex.student@college.edu',
       demoPass: 'student123',
       badge: 'Attendance Records',
@@ -101,15 +101,15 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' }}>
       <div style={{ textAlign: 'center', marginBottom: 28 }}>
-        <h1 style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '-0.8px', color: '#fff', marginBottom: 8 }}>
+        <h1 className="animated-gradient-text" style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.8px', marginBottom: 8 }}>
           Attendance System Portal
         </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: 540, margin: '0 auto' }}>
+        <p style={{ color: 'var(--dust-text)', fontSize: '1rem', maxWidth: 540, margin: '0 auto' }}>
           Select your portal role below to sign in. All accounts and attendance logs are securely stored in MongoDB Atlas.
         </p>
       </div>
 
-      <div className="glass-panel" style={{ width: '100%', maxWidth: 480, padding: 32 }}>
+      <div className="glass-panel animated-gradient-border" style={{ width: '100%', maxWidth: 480, padding: 32 }}>
         {/* Role Selection Tabs */}
         <div
           style={{
@@ -117,10 +117,10 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 8,
             padding: 6,
-            background: 'rgba(13, 18, 30, 0.9)',
+            background: '#0f0f0f',
             borderRadius: 'var(--radius-md)',
             marginBottom: 24,
-            border: '1px solid var(--border-color)',
+            border: '1px solid var(--dust-border)',
           }}
         >
           {Object.keys(roleConfig).map((key) => {
@@ -140,12 +140,13 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
                   padding: '10px 4px',
                   borderRadius: 'var(--radius-sm)',
                   border: isSelected ? `1px solid ${role.color}` : '1px solid transparent',
-                  background: isSelected ? `rgba(${key === 'maintainer' ? '99, 102, 241' : key === 'faculty' ? '16, 185, 129' : '6, 182, 212'}, 0.15)` : 'transparent',
-                  color: isSelected ? '#fff' : 'var(--text-muted)',
+                  background: isSelected ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
+                  color: isSelected ? '#FFFFFF' : 'var(--dust-text)',
+                  boxShadow: isSelected ? `0 0 12px ${role.color}40` : 'none',
                   cursor: 'pointer',
                   fontWeight: isSelected ? 700 : 500,
                   fontSize: '0.8rem',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.25s ease',
                 }}
               >
                 <Icon size={18} style={{ color: isSelected ? role.color : 'inherit' }} />
@@ -163,21 +164,23 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
             gap: 12,
             padding: '12px 16px',
             borderRadius: 'var(--radius-md)',
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid var(--border-color)',
+            background: '#1a1a1a',
+            border: '1px solid var(--dust-border)',
             marginBottom: 24,
           }}
         >
           <div
             style={{
-              width: 36,
-              height: 36,
+              width: 38,
+              height: 38,
               borderRadius: 8,
-              background: `rgba(${selectedRole === 'maintainer' ? '99, 102, 241' : selectedRole === 'faculty' ? '16, 185, 129' : '6, 182, 212'}, 0.2)`,
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${roleConfig[selectedRole].color}50`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: roleConfig[selectedRole].color,
+              boxShadow: `0 0 10px ${roleConfig[selectedRole].color}30`,
             }}
           >
             <CurrentRoleIcon size={20} />
@@ -186,7 +189,7 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
             <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff' }}>
               {roleConfig[selectedRole].title}
             </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--dust-text)' }}>
               {roleConfig[selectedRole].subtitle}
             </p>
           </div>
@@ -199,9 +202,9 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
             style={{
               padding: '12px 14px',
               borderRadius: 'var(--radius-md)',
-              background: 'rgba(244, 63, 94, 0.15)',
-              border: '1px solid rgba(244, 63, 94, 0.35)',
-              color: '#fecdd3',
+              background: 'rgba(255, 59, 48, 0.14)',
+              border: '1px solid rgba(255, 59, 48, 0.4)',
+              color: '#ffd6d6',
               fontSize: '0.85rem',
               textAlign: 'left',
               marginBottom: 20,
@@ -229,7 +232,7 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
               />
               <Mail
                 size={16}
-                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }}
+                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--dust-dim)' }}
               />
             </div>
           </div>
@@ -249,12 +252,12 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
               />
               <KeyRound
                 size={16}
-                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }}
+                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--dust-dim)' }}
               />
             </div>
           </div>
 
-          {/* Quick Demo Fill Button */}
+          {/* Quick Demo Fill Button: Neon Cyan (#00F5FF) for links & glow effects */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <button
               type="button"
@@ -262,32 +265,33 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
               style={{
                 background: 'none',
                 border: 'none',
-                color: roleConfig[selectedRole].color,
+                color: '#00F5FF',
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 4,
+                gap: 5,
+                transition: 'all 0.2s ease',
               }}
             >
               <Sparkles size={13} />
-              Auto-fill Demo Credentials
+              <span>Auto-fill Demo Credentials</span>
             </button>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-              Role: <strong>{selectedRole}</strong>
+            <span style={{ fontSize: '0.75rem', color: 'var(--dust-dim)' }}>
+              Role: <strong style={{ color: roleConfig[selectedRole].color }}>{selectedRole}</strong>
             </span>
           </div>
 
+          {/* Primary Action Button: Neon Orange (#FF6A00) */}
           <button
             type="submit"
             disabled={isLoading}
             className="btn btn-primary"
             style={{
               width: '100%',
-              padding: '12px',
+              padding: '13px',
               fontSize: '0.95rem',
-              background: `linear-gradient(135deg, ${roleConfig[selectedRole].color}, #4338ca)`,
             }}
           >
             {isLoading ? (
@@ -306,20 +310,20 @@ export default function Login({ onLoginSuccess, isMongoConnected }) {
           style={{
             marginTop: 24,
             paddingTop: 16,
-            borderTop: '1px solid var(--border-color)',
+            borderTop: '1px solid var(--dust-border)',
             textAlign: 'left',
             fontSize: '0.75rem',
-            color: 'var(--text-dim)',
+            color: 'var(--dust-dim)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, color: 'var(--text-muted)' }}>
-            <CheckCircle2 size={14} color="#10b981" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, color: '#90EE90' }}>
+            <CheckCircle2 size={15} color="#90EE90" />
             <span style={{ fontWeight: 600 }}>Default Accounts in MongoDB:</span>
           </div>
-          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 3, lineHeight: 1.4 }}>
-            <li><strong>Maintainer:</strong> maintainer@college.edu / adminpassword</li>
-            <li><strong>Faculty:</strong> sarah.faculty@college.edu / faculty123</li>
-            <li><strong>Student:</strong> alex.student@college.edu / student123</li>
+          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 4, lineHeight: 1.4, color: 'var(--dust-text)' }}>
+            <li><strong style={{ color: '#FF6A00' }}>Maintainer:</strong> maintainer@college.edu / adminpassword</li>
+            <li><strong style={{ color: '#BF5AF2' }}>Faculty:</strong> sarah.faculty@college.edu / faculty123</li>
+            <li><strong style={{ color: '#00F5FF' }}>Student:</strong> alex.student@college.edu / student123</li>
           </ul>
         </div>
       </div>

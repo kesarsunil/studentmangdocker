@@ -223,11 +223,11 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
         </div>
 
         {/* Tab Switcher */}
-        <div style={{ display: 'flex', gap: 8, background: 'rgba(13, 18, 30, 0.8)', padding: 4, borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', gap: 8, background: '#101010', padding: 4, borderRadius: 'var(--radius-md)', border: '1px solid var(--dust-border)' }}>
           <button
             onClick={() => setActiveTab('take')}
             className={`btn btn-sm ${activeTab === 'take' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ padding: '8px 18px', background: activeTab === 'take' ? 'linear-gradient(135deg, #10b981, #059669)' : 'transparent' }}
+            style={{ padding: '8px 18px' }}
           >
             <CheckCheck size={16} />
             <span>Take Attendance</span>
@@ -235,7 +235,11 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
           <button
             onClick={() => setActiveTab('history')}
             className={`btn btn-sm ${activeTab === 'history' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ padding: '8px 18px', background: activeTab === 'history' ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'transparent' }}
+            style={{
+              padding: '8px 18px',
+              background: activeTab === 'history' ? 'linear-gradient(135deg, #BF5AF2, #9a3cd0)' : undefined,
+              boxShadow: activeTab === 'history' ? '0 4px 16px rgba(191, 90, 242, 0.45)' : undefined,
+            }}
           >
             <History size={16} />
             <span>Attendance History ({historySessions.length})</span>
@@ -319,7 +323,7 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                   type="button"
                   onClick={() => markAll('Present')}
                   className="btn btn-secondary btn-sm"
-                  style={{ flex: 1, borderColor: 'rgba(16, 185, 129, 0.4)', color: '#34d399' }}
+                  style={{ flex: 1, borderColor: '#90EE90', color: '#90EE90' }}
                 >
                   All Present
                 </button>
@@ -327,7 +331,7 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                   type="button"
                   onClick={() => markAll('Absent')}
                   className="btn btn-secondary btn-sm"
-                  style={{ flex: 1, borderColor: 'rgba(244, 63, 94, 0.4)', color: '#fb7185' }}
+                  style={{ flex: 1, borderColor: '#FF3B30', color: '#FF3B30' }}
                 >
                   All Absent
                 </button>
@@ -427,9 +431,9 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                                   borderRadius: 6,
                                   border: 'none',
                                   cursor: 'pointer',
-                                  background: currentStatus === 'Present' ? '#10b981' : 'transparent',
-                                  color: currentStatus === 'Present' ? '#fff' : '#6b7280',
-                                  boxShadow: currentStatus === 'Present' ? '0 0 12px rgba(16, 185, 129, 0.4)' : 'none',
+                                  background: currentStatus === 'Present' ? '#90EE90' : 'transparent',
+                                  color: currentStatus === 'Present' ? '#080808' : 'var(--dust-text)',
+                                  boxShadow: currentStatus === 'Present' ? '0 0 12px rgba(144, 238, 144, 0.45)' : 'none',
                                   transition: 'all 0.15s ease',
                                 }}
                               >
@@ -445,9 +449,9 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                                   borderRadius: 6,
                                   border: 'none',
                                   cursor: 'pointer',
-                                  background: currentStatus === 'Absent' ? '#f43f5e' : 'transparent',
-                                  color: currentStatus === 'Absent' ? '#fff' : '#6b7280',
-                                  boxShadow: currentStatus === 'Absent' ? '0 0 12px rgba(244, 63, 94, 0.4)' : 'none',
+                                  background: currentStatus === 'Absent' ? '#FF3B30' : 'transparent',
+                                  color: currentStatus === 'Absent' ? '#fff' : 'var(--dust-text)',
+                                  boxShadow: currentStatus === 'Absent' ? '0 0 12px rgba(255, 59, 48, 0.45)' : 'none',
                                   transition: 'all 0.15s ease',
                                 }}
                               >
@@ -463,9 +467,9 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                                   borderRadius: 6,
                                   border: 'none',
                                   cursor: 'pointer',
-                                  background: currentStatus === 'Late' ? '#f59e0b' : 'transparent',
-                                  color: currentStatus === 'Late' ? '#fff' : '#6b7280',
-                                  boxShadow: currentStatus === 'Late' ? '0 0 12px rgba(245, 158, 11, 0.4)' : 'none',
+                                  background: currentStatus === 'Late' ? '#FFB800' : 'transparent',
+                                  color: currentStatus === 'Late' ? '#080808' : 'var(--dust-text)',
+                                  boxShadow: currentStatus === 'Late' ? '0 0 12px rgba(255, 184, 0, 0.45)' : 'none',
                                   transition: 'all 0.15s ease',
                                 }}
                               >
@@ -484,7 +488,7 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
             {/* Submit Button Bar */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: 12 }}>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Marking for: <strong style={{ color: '#fff' }}>{selectedSubject}</strong> • Section: <strong style={{ color: '#38bdf8' }}>{selectedSection}</strong> • Date: <strong style={{ color: '#fff' }}>{selectedDate}</strong>
+                Marking for: <strong style={{ color: '#fff' }}>{selectedSubject}</strong> • Section: <strong style={{ color: '#00F5FF' }}>{selectedSection}</strong> • Date: <strong style={{ color: '#fff' }}>{selectedDate}</strong>
               </div>
 
               <div style={{ display: 'flex', gap: 12 }}>
@@ -501,7 +505,7 @@ export default function FacultyDashboard({ currentUser, onNotify }) {
                   onClick={handleSubmitAttendance}
                   disabled={isSubmitting || students.length === 0}
                   className="btn btn-primary"
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', padding: '12px 28px', fontSize: '0.95rem' }}
+                  style={{ padding: '12px 28px', fontSize: '0.95rem' }}
                 >
                   <Save size={18} />
                   <span>{isSubmitting ? 'Saving to MongoDB...' : 'Save Attendance to MongoDB Atlas'}</span>
